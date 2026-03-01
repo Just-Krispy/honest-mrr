@@ -11,7 +11,6 @@ export default function Home() {
                         <p className="text-gray-500">
                                   Get started by editing this page.
                         </p>p>
-                </div>div>
-          </main>main>
-        );
-}</main>
+                </div>div>          </main>main>
+        </main>}</main>
+        }
