@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Brain – Mission Control (Vibrant Demo)</title>
+    <link rel="stylesheet" href="second-brain-EXACT-MATCH.css">
+    <link rel="stylesheet" href="second-brain-mobile-enhancements.css">
+    <style>
+        /* Demo page structure */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+        }
+
+        .second-brain {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        .demo-badge {
+            background: var(--accent-secondary);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.6);
+        }
+
+        /* Controls */
+        .controls {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Knowledge graph container */
+        .knowledge-graph {
+            flex: 1;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            padding: 20px;
+            border-left: 1px solid rgba(0, 255, 255, 0.2);
+            overflow-y: auto;
+        }
+
+        /* Legend styling */
+        .legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        /* Stats section */
+        .stats-section {
+            margin-bottom: 20px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            display: block;
+        }
+
+        /* SVG styles */
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Node tooltip */
+        .node-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .node-tooltip.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="second-brain">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="header-title">Second Brain – Mission Control</h1>
+            <span class="demo-badge">DEMO</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="mode-button active">PLAY</button>
+            <button class="mode-button">CRT</button>
+            <button class="mode-button">THERM</button>
+            <button class="mode-button">NVIS</button>
+            <input type="search" class="search-bar" placeholder="Search nodes...">
+            <button class="find-node-btn">Find node</button>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Knowledge graph -->
+            <div class="knowledge-graph" id="graph">
+                <!-- SVG will be inserted here -->
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-title">Legend</div>
+                <div class="legend-item">
+                    <div class="legend-color" data-type="resource" style="background: #00ffff;"></div>
+                    <span>Resources</span>
+                    <span class="legend-count">(10)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" data-type="area" style="background: #ff0080;"></div>
+                    <span>Areas</span>
+                    <span class="legend-count">(3)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" data-type="inbox" style="background: #00ff66;"></div>
+                    <span>Inbox</span>
+                    <span class="legend-count">(2)</span>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="stats-section">
+                    <div class="legend-title">Statistics</div>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Total Nodes</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">23</span>
+                            <span class="stat-label">Connections</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Clusters</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">89%</span>
+                            <span class="stat-label">Density</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="node-tooltip" id="tooltip">
+        <div id="tooltip-content"></div>
+    </div>
+
+    <script>
+        // Demo graph data
+        const nodes = [
+            { id: 1, label: "Privacy Tech", type: "area", x: 300, y: 200 },
+            { id: 2, label: "WiFi Scanning", type: "resource", x: 450, y: 150 },
+            { id: 3, label: "Voice AI", type: "resource", x: 500, y: 250 },
+            { id: 4, label: "Video Production", type: "inbox", x: 400, y: 350 },
+            { id: 5, label: "Autonomous Builder", type: "area", x: 650, y: 200 },
+            { id: 6, label: "Local AI", type: "resource", x: 750, y: 150 },
+            { id: 7, label: "Cost Optimization", type: "resource", x: 800, y: 250 },
+            { id: 8, label: "Second Brain", type: "area", x: 550, y: 450 },
+            { id: 9, label: "Knowledge Graph", type: "resource", x: 400, y: 500 },
+            { id: 10, label: "Research", type: "resource", x: 700, y: 500 },
+            { id: 11, label: "New Orchards", type: "inbox", x: 200, y: 300 },
+            { id: 12, label: "Spatial AI", type: "resource", x: 300, y: 400 },
+            { id: 13, label: "Autoresearch", type: "resource", x: 600, y: 350 },
+            { id: 14, label: "Eric Weinstein", type: "resource", x: 150, y: 200 },
+            { id: 15, label: "Meta-Thinking", type: "resource", x: 100, y: 350 }
+        ];
+
+        const edges = [
+            { source: 1, target: 2 }, { source: 1, target: 3 }, { source: 1, target: 4 },
+            { source: 5, target: 6 }, { source: 5, target: 7 }, { source: 5, target: 13 },
+            { source: 8, target: 9 }, { source: 8, target: 10 }, { source: 8, target: 12 },
+            { source: 11, target: 1 }, { source: 11, target: 5 }, { source: 11, target: 8 },
+            { source: 14, target: 11 }, { source: 14, target: 15 },
+            { source: 2, target: 6 }, { source: 3, target: 4 }, { source: 4, target: 13 },
+            { source: 9, target: 10 }, { source: 12, target: 13 }, { source: 6, target: 7 },
+            { source: 1, target: 11 }, { source: 5, target: 8 }, { source: 15, target: 11 }
+        ];
+
+        // Create SVG
+        const graphContainer = document.getElementById('graph');
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 1000 600');
+        graphContainer.appendChild(svg);
+
+        // Draw edges
+        const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        svg.appendChild(edgesGroup);
+
+        edges.forEach(edge => {
+            const source = nodes.find(n => n.id === edge.source);
+            const target = nodes.find(n => n.id === edge.target);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('class', 'edge');
+            line.setAttribute('x1', source.x);
+            line.setAttribute('y1', source.y);
+            line.setAttribute('x2', target.x);
+            line.setAttribute('y2', target.y);
+            edgesGroup.appendChild(line);
+        });
+
+        // Draw nodes
+        const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        svg.appendChild(nodesGroup);
+
+        const tooltip = document.getElementById('tooltip');
+        const tooltipContent = document.getElementById('tooltip-content');
+
+        nodes.forEach(node => {
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('class', `node ${node.type}`);
+            g.setAttribute('data-type', node.type);
+            
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', node.x);
+            circle.setAttribute('cy', node.y);
+            circle.setAttribute('r', 10);
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('class', 'node-label');
+            text.setAttribute('x', node.x);
+            text.setAttribute('y', node.y - 15);
+            text.setAttribute('text-anchor', 'middle');
+            text.textContent = node.label;
+            
+            g.appendChild(circle);
+            g.appendChild(text);
+            nodesGroup.appendChild(g);
+
+            // Tooltip interaction
+            g.addEventListener('mouseenter', (e) => {
+                tooltipContent.innerHTML = `
+                    <strong>${node.label}</strong><br>
+                    <span style="color: var(--text-secondary);">Type: ${node.type}</span><br>
+                    <span style="color: var(--text-secondary);">ID: ${node.id}</span>
+                `;
+                tooltip.classList.add('show');
+            });
+
+            g.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 15) + 'px';
+            });
+
+            g.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('show');
+            });
+        });
+
+        // Mode button interactions
+        document.querySelectorAll('.mode-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        const searchBar = document.querySelector('.search-bar');
+        searchBar.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.node').forEach(node => {
+                const label = node.querySelector('.node-label').textContent.toLowerCase();
+                if (query && label.includes(query)) {
+                    node.classList.add('highlight');
+                } else {
+                    node.classList.remove('highlight');
+                }
+            });
+        });
+
+        // Find node button
+        document.querySelector('.find-node-btn').addEventListener('click', () => {
+            const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+            searchBar.value = randomNode.label;
+            searchBar.dispatchEvent(new Event('input'));
+        });
+    </script>
+    <script src="second-brain-mobile-interactions.js"></script>
+</body>
+</html>
