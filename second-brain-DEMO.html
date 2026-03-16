@@ -43,6 +43,23 @@
             text-shadow: 0 0 10px var(--accent-primary);
         }
 
+        .header-btn {
+            background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
+        }
+
         .demo-badge {
             background: var(--accent-secondary);
             color: #ffffff;
@@ -142,6 +159,13 @@
         .node-tooltip.show {
             display: block;
         }
+
+        /* Selected node highlight */
+        .node.selected circle {
+            stroke: #ffffff;
+            stroke-width: 3px;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+        }
     </style>
 </head>
 <body>
@@ -149,7 +173,12 @@
         <!-- Header -->
         <div class="header">
             <h1 class="header-title">Second Brain – Mission Control</h1>
-            <span class="demo-badge">DEMO</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button id="analyze-cassandra-btn" class="header-btn" title="Analyze selected node in Cassandra AI">
+                    🔮 Analyze Decision
+                </button>
+                <span class="demo-badge">DEMO</span>
+            </div>
         </div>
 
         <!-- Controls -->
@@ -281,6 +310,9 @@
         const tooltip = document.getElementById('tooltip');
         const tooltipContent = document.getElementById('tooltip-content');
 
+        // Track selected node for Cassandra integration
+        window.selectedNode = null;
+
         nodes.forEach(node => {
             const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             g.setAttribute('class', `node ${node.type}`);
@@ -301,6 +333,21 @@
             g.appendChild(circle);
             g.appendChild(text);
             nodesGroup.appendChild(g);
+
+            // Node selection on click
+            g.addEventListener('click', () => {
+                // Clear previous selection
+                document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+                g.classList.add('selected');
+                
+                // Store selected node data
+                window.selectedNode = {
+                    name: node.label,
+                    text: `Type: ${node.type}\nID: ${node.id}\n\nThis is a ${node.type} node in your knowledge graph. You can expand this with more details about the node's content, connections, and context.`,
+                    type: node.type,
+                    id: node.id
+                };
+            });
 
             // Tooltip interaction
             g.addEventListener('mouseenter', (e) => {
@@ -349,6 +396,30 @@
             const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
             searchBar.value = randomNode.label;
             searchBar.dispatchEvent(new Event('input'));
+        });
+
+        // Cassandra AI Integration
+        document.getElementById('analyze-cassandra-btn').addEventListener('click', function() {
+            const selectedNode = window.selectedNode;
+            
+            if (!selectedNode || !selectedNode.text) {
+                alert('Please select a node first!');
+                return;
+            }
+            
+            // Copy node text to clipboard
+            const nodeText = `${selectedNode.name}\n\n${selectedNode.text || 'No details available'}`;
+            
+            navigator.clipboard.writeText(nodeText).then(() => {
+                // Open Cassandra AI in new tab
+                window.open('https://just-krispy.github.io/cassandra-ai-mvp/', '_blank');
+                
+                // Show success message
+                alert('Node text copied! Paste it into Cassandra AI to analyze.');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy text. Please try again.');
+            });
         });
     </script>
     <script src="second-brain-mobile-interactions.js"></script>
