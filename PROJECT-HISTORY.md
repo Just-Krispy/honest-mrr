@@ -27,7 +27,7 @@ Each project entry:
 
 ## 2026 Projects
 
-### Nash Brain - Game Theory Decision Engine (2026-03-15)
+### Nash - Game Theory Decision Engine (2026-03-15)
 - **Status:** Shipped
 - **Type:** Product
 - **Complexity:** Medium (6 agents, ~27 min build, 2 bug fixes)
@@ -232,7 +232,7 @@ Each project entry:
 
 ## Next Projects (Predictions)
 
-### Cassandra Brain Integration
+### Nash Integration
 - **Predicted Complexity:** Medium (API bridge required)
 - **Predicted Time:** 1-2 weeks (if full platform), 2-3 days (if simple MVP)
 - **Success Probability:** 65% IF simple, 35% IF complex

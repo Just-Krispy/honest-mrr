@@ -26,8 +26,8 @@
 
 ## Active Decisions (Pending)
 
-### Cassandra Brain Integration (2026-03-16)
-- **Question:** Should I integrate Nash Brain with Second Brain?
+### Nash Integration (2026-03-16)
+- **Question:** Should I integrate Nash with Second Brain?
 - **Predicted Success:** 
   - **66% ship probability** (predictor output)
   - **ROI Score: 21.0/10** (extremely high long-term value)
@@ -69,7 +69,7 @@
 
 ## Past Decisions (Resolved)
 
-### Build Cassandra AI (2026-03-15)
+### Build Nash (2026-03-15)
 - **Question:** Should I build a game theory decision engine?
 - **Predicted Success:** 70% (proven pattern: simple HTML + API)
 - **Predicted Time:** 4-6 hours (parallel agent build)

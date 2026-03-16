@@ -277,4 +277,4 @@ ASSUME: All players are rational actors seeking to maximize their security/econo
 
 ---
 
-**Ready to paste into Nash Brain!** 🚀🔮
+**Ready to paste into Nash!** 🚀🔮
